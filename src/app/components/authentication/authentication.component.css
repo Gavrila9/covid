@@ -2,8 +2,21 @@ div {
   display: flex;
 }
 
-img {
-  width: 10rem;
+img.logo {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 6rem;
+}
+
+img.university {
+  width: 15rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 2rem;
 }
 
 .container {
