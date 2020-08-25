@@ -1,0 +1,29 @@
+<div class="container">
+
+
+<div class="form">
+  <img src="../../../assets/University_of_Leeds_crest.svg" alt="">
+  <form [formGroup]="form">
+    <mat-form-field class="amount">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" required type="text">
+      <mat-error *ngIf="form.controls['username'].hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="password">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" required type="password">
+      <mat-error *ngIf="form.controls['password'].hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="amount">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput formControlName="confirmPassword" required type="password" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="form.controls['confirmPassword'].hasError('required')">Required</mat-error>
+      <mat-error *ngIf="form.hasError('not-match')">Does not match password</mat-error>
+    </mat-form-field>
+    <button mat-raised-button (click)="login()" [disabled]="form.invalid">Login</button>
+    <button mat-raised-button (click)="register()" [disabled]="form.invalid">Register</button>
+  </form>
+</div>
+</div>

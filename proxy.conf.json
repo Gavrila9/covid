@@ -2,5 +2,17 @@
   "/init": {
     "target": "http://localhost:8088",
     "secure": false
+  },
+  "/login": {
+    "target": "http://localhost:8088",
+    "secure": false
+  },
+  "/logOut": {
+    "target": "http://localhost:8088",
+    "secure": false
+  },
+  "/register": {
+    "target": "http://localhost:8088",
+    "secure": false
   }
 }

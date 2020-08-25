@@ -1,0 +1,58 @@
+<div class="container flex-column">
+  <div class="user-info">
+    <span class="username">Welcome, {{username}}</span>
+    <button mat-button color="primary" (click)="logout()">Logout</button>
+  </div>
+  <div class="header">
+    <h1 class="title">OpenMrs-Surveillance System</h1>
+    <div class="summary">
+      <h3 class="status">Confirmed: <span style="font-size: 1.2rem; color: red">{{totalConfirmed.length}}</span></h3>
+      <h3 class="status">Active Case: <span
+        style="font-size: 1.2rem; color: rgb(202, 76, 38)">{{activeCase.length}}</span></h3>
+      <h3 class="status">Recovered: <span style="font-size: 1.2rem; color: green">{{recovered.length}}</span></h3>
+      <h3 class="status">Deaths: <span style="font-size: 1.2rem; color: gray">{{deaths.length}}</span></h3>
+      <h3 class="status">Suspected: <span style="font-size: 1.2rem; color: black">{{suspected.length}}</span></h3>
+    </div>
+  </div>
+  <div class="details">
+    <div class="left-map">
+      <div id="baidu-map"></div>
+    </div>
+
+    <div class="right-charts">
+      <div class="chart">
+        <div class="chart-title">By Age</div>
+        <div class="charts-container" style="position: relative; width:400px">
+          <canvas class="chart" #groupByAgeChartElement></canvas>
+        </div>
+      </div>
+      <div class="chart">
+        <div class="chart-title">By City</div>
+        <div class="charts-container" style="position: relative; width:400px">
+          <canvas class="chart" #groupByCityChartElement></canvas>
+        </div>
+      </div>
+      <div class="chart">
+        <div class="chart-title">Accumulate By Date</div>
+        <div class="charts-container" style="position: relative; width:400px">
+          <canvas class="chart" #groupByDateChartElement></canvas>
+        </div>
+      </div>
+      <div class="chart">
+        <div class="chart-title">New Confirmed by Date</div>
+        <div class="charts-container" style="position: relative; width:400px">
+          <canvas class="chart" #newConfirmedChartElement></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flex-row">
+
+  </div>
+
+  <div class="flex-row">
+
+  </div>
+</div>

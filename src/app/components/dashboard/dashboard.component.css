@@ -1,0 +1,78 @@
+div {
+  display: flex;
+}
+
+.container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+.user-info {
+  justify-content: flex-end;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  flex-direction: row;
+  height: 10%;
+  justify-content: space-between;
+}
+
+h1.title {
+  display: flex;
+  align-items: center;
+}
+
+.summary {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.status {
+  margin: 10px;
+}
+
+.details {
+  height: 90%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.left-map {
+  width: 65%;
+  background: blanchedalmond;
+}
+
+#baidu-map {
+  height: 100%;
+  width: 100%;
+}
+
+.map {
+  /*width: 500px;*/
+  /*height: 500px;*/
+  /*background: blanchedalmond;*/
+}
+
+.right-charts {
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+div.chart {
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.chart-title {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
