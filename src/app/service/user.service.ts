@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DataPoint } from '../model/data-point';
 
 @Injectable()
 export class UserService {
@@ -15,11 +13,11 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  register(registerInfo: {username: string, password: string}) {
+  register(registerInfo: { username: string, password: string }) {
     return this.http.post(this.registerURL, registerInfo)
   }
 
-  login(loginInfo: {userName: string, password: string}) {
+  login(loginInfo: { userName: string, password: string }) {
     return this.http.get(this.loginURL, { params: loginInfo })
   }
 

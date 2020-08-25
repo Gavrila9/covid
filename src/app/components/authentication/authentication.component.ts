@@ -59,11 +59,6 @@ export class AuthenticationComponent implements OnInit {
 
     this.userService.register(registerInfo).subscribe((res: { message: string }) => {
       this.snackBar.open(res.message, 'Dismiss', { duration: 2000 })
-      // if(res.message === 'Login fail, wrong password') {
-      //   this.snackBar.open(res.message, 'Dismiss', { duration: 2000})
-      // } else {
-      //   this.userService.token = res.token;
-      // }
     })
   }
 

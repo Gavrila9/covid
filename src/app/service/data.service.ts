@@ -18,7 +18,6 @@ export class DataService {
   }
 
   loadData() {
-    // this._dataPoints = <Observable<DataPoint[]>>this.http.get(this.dataURL, { headers: { 'token': this.userService.token } });
-    this._dataPoints = <Observable<DataPoint[]>>this.http.get(this.dataURL);
+    this._dataPoints = <Observable<DataPoint[]>>this.http.get(this.dataURL, { headers: { 'token': this.userService.token } });
   }
 }

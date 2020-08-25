@@ -8,14 +8,7 @@ import { DataService } from '../../service/data.service';
 import { UserService } from '../../service/user.service';
 
 declare var BMap: any;
-declare var BMAP_ANIMATION_BOUNCE: any;
-declare var BMAP_POINT_SHAPE_STAR: any;
-declare var BMAP_HYBRID_MAP: any;
-declare var BMAP_NORMAL_MAP: any;
-declare var BMAP_POINT_SIZE_SMALL: any;
-declare var BMAP_ANCHOR_TOP_LEFT: any;
 declare var BMapLib: any;
-
 
 @Component({
   selector: 'app-dashboard',
@@ -23,8 +16,6 @@ declare var BMapLib: any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  title = 'covid';
-
   dataPoints: DataPoint[] = [];
 
   @ViewChild('groupByAgeChartElement', { static: false }) groupByAgeChartElement: ElementRef;
@@ -35,9 +26,7 @@ export class DashboardComponent implements OnInit {
   groupByCityChart: Chart;
   groupByDateChart: Chart;
   activeAndConfirmedChart: Chart;
-
   map;
-
   username;
 
   constructor(private dataService: DataService, private userService: UserService, private router: Router, private changeDetectorRef: ChangeDetectorRef) {
@@ -48,43 +37,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.username = this.userService.username;
-
-    const that = this;
-    this.map = new BMap.Map('baidu-map', {});                        // 创建Map实例
+    this.map = new BMap.Map('baidu-map', {});
     this.map.centerAndZoom(new BMap.Point(114.271, 30.631), 11);
-    // this.map.addControl(new BMap.MapTypeControl({
-    //   mapTypes: [
-    //     BMAP_NORMAL_MAP,
-    //     BMAP_HYBRID_MAP
-    //   ]
-    // }));
-    // this.map.addControl(new BMap.Control({
-    //   anchor: BMAP_ANCHOR_TOP_LEFT,
-    //   initialize: (map, that)=> {
-    //     var div = document.createElement("div");
-    //     // 添加文字说明
-    //     div.appendChild(document.createTextNode("confirmed"));
-    //     // 设置样式
-    //     div.style.cursor = "pointer";
-    //     div.style.border = "1px solid gray";
-    //     div.style.backgroundColor = "white";
-    //     // 绑定事件，点击一次放大两级
-    //     div.onclick = function(e){
-    //       that.changeCaseType(Status.confirmed)
-    //     }
-    //     // 添加DOM元素到地图中
-    //     map.getContainer().appendChild(div);
-    //     // 将DOM元素返回
-    //     return div;
-    //   }
-    // }));
-    this.map.setCurrentCity('武汉');          // 设置地图显示的城市 此项是必须设置的
+    this.map.setCurrentCity('武汉');
     this.map.enableScrollWheelZoom(true);
 
     this.dataService.loadData();
+
     this.dataService.dataPoints.subscribe(dataPoints => {
       this.dataPoints = dataPoints;
-
       this.drawByAgeChart();
       this.drawByCityChart();
       this.drawByDateChart();
@@ -94,47 +55,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  changeCaseType(caseType: Status) {
-
-    this.map.clearOverlays();
-    let overlay;
-    let data: DataPoint[] = [];
-    switch (caseType) {
-      case Status.confirmed:
-        data = this.totalConfirmed;
-        break;
-      case Status.cured:
-        data = this.recovered
-        break;
-      case Status.suspected:
-        data = this.suspected;
-        break;
-      case Status.death:
-        data = this.deaths;
-        break;
-      default:
-        break;
-    }
-
-
-    const points = data.map(dataPoint => {
-      return new BMap.Point(Number(dataPoint.longitude), Number(dataPoint.latitude))
-    })
-    const options = {
-      size: BMAP_POINT_SIZE_SMALL,
-      shape: BMAP_POINT_SHAPE_STAR,
-      color: 'red',
-      zIndex: 5,
-    }
-    console.log('points', points)
-    overlay = new BMap.PointCollection(points, options);  // 初始化PointCollection
-    // pointCollection.addEventListener('click', function (e) {
-    //   alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
-    // });
-    this.map.addOverlay(overlay);
-    this.changeDetectorRef.detectChanges();
-  }
-
   drawMap() {
     var markers = [];
     const points = this.dataPoints.map(dataPoint => {
@@ -142,122 +62,8 @@ export class DashboardComponent implements OnInit {
       markers.push(new BMap.Marker(point));
       return point;
     })
-    const options = {
-      size: BMAP_POINT_SIZE_SMALL,
-      shape: BMAP_POINT_SHAPE_STAR,
-      color: 'red',
-      zIndex: 5,
-    }
-    console.log('points', points)
-    // const overlay = new BMap.PointCollection(points, options);  // 初始化PointCollection
-    // pointCollection.addEventListener('click', function (e) {
-    //   alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
-    // });
-    // this.map.addOverlay(overlay);
-    // var MAX = 10;
-    // var markers = [];
-    // var pt = null;
-    // var i = 0;
-    // for (; i < MAX; i++) {
-    //   pt = new BMap.Point(Math.random() * 40 + 85, Math.random() * 30 + 21);
-    //   markers.push(new BMap.Marker(pt));
-    // }
-    //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
     const markerClusterer = new BMapLib.MarkerClusterer(this.map, { markers: markers });
     this.changeDetectorRef.detectChanges();
-
-  }
-
-  private drawByAgeChart() {
-    this.groupByAgeChart = new Chart(
-      this.groupByAgeChartElement.nativeElement.getContext('2d'),
-      {
-        type: 'horizontalBar',
-        data: this.groupByAge,
-        options: {
-          responsive: true,
-          legend: {
-            display: false,
-            position: 'right',
-          },
-        }
-      });
-  }
-
-  private drawByCityChart() {
-    this.groupByCityChart = new Chart(
-      this.groupByCityChartElement.nativeElement.getContext('2d'),
-      {
-        type: 'horizontalBar',
-        data: this.groupByCity,
-        options: {
-          responsive: true,
-          legend: {
-            display: false,
-            position: 'right',
-          },
-        }
-      });
-  }
-
-  private drawByDateChart() {
-    this.groupByDateChart = new Chart(
-      this.groupByDateChartElement.nativeElement.getContext('2d'),
-      {
-        type: 'bar',
-        data: this.accumulateByDate,
-        options: {
-          responsive: true,
-          legend: {
-            display: false,
-            position: 'right',
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-              ticks: {
-                autoSkip: true,
-                maxTicksLimit: 15,
-              }
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                callback(value: number | string) {
-                  if (typeof value === 'number') {
-                    return Math.abs(value);
-                  }
-                }
-              }
-            }]
-          },
-          tooltips: {
-            callbacks: {
-              label: function (t, d) {
-                const datasetLabel = d.datasets[t.datasetIndex].label;
-                const yLabel = typeof t.yLabel === 'number' ? Math.abs(t.yLabel) : t.yLabel;
-                return datasetLabel + ': ' + yLabel;
-              }
-            }
-          }
-        }
-      });
-  }
-
-  private drawNewConfirmedChart() {
-    this.activeAndConfirmedChart = new Chart(
-      this.activeAndConfirmedChartElement.nativeElement.getContext('2d'),
-      {
-        type: 'bar',
-        data: this.confirmedByDate,
-        options: {
-          responsive: true,
-          legend: {
-            display: false,
-            position: 'right',
-          },
-        }
-      });
   }
 
   logout() {
@@ -448,9 +254,6 @@ export class DashboardComponent implements OnInit {
       return previous;
     }, {});
 
-
-    console.log('res', groupedData);
-
     return {
       labels: Object.keys(groupedData),
       datasets: [
@@ -460,8 +263,98 @@ export class DashboardComponent implements OnInit {
         }
       ]
     }
+  }
 
-    // return groupedData;
+  private drawByAgeChart() {
+    this.groupByAgeChart = new Chart(
+      this.groupByAgeChartElement.nativeElement.getContext('2d'),
+      {
+        type: 'horizontalBar',
+        data: this.groupByAge,
+        options: {
+          responsive: true,
+          legend: {
+            display: false,
+            position: 'right',
+          },
+        }
+      });
+  }
+
+  private drawByCityChart() {
+    this.groupByCityChart = new Chart(
+      this.groupByCityChartElement.nativeElement.getContext('2d'),
+      {
+        type: 'horizontalBar',
+        data: this.groupByCity,
+        options: {
+          responsive: true,
+          legend: {
+            display: false,
+            position: 'right',
+          },
+        }
+      });
+  }
+
+  private drawByDateChart() {
+    this.groupByDateChart = new Chart(
+      this.groupByDateChartElement.nativeElement.getContext('2d'),
+      {
+        type: 'bar',
+        data: this.accumulateByDate,
+        options: {
+          responsive: true,
+          legend: {
+            display: false,
+            position: 'right',
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 15,
+              }
+            }],
+            yAxes: [{
+              stacked: true,
+              ticks: {
+                callback(value: number | string) {
+                  if (typeof value === 'number') {
+                    return Math.abs(value);
+                  }
+                }
+              }
+            }]
+          },
+          tooltips: {
+            callbacks: {
+              label: function (t, d) {
+                const datasetLabel = d.datasets[t.datasetIndex].label;
+                const yLabel = typeof t.yLabel === 'number' ? Math.abs(t.yLabel) : t.yLabel;
+                return datasetLabel + ': ' + yLabel;
+              }
+            }
+          }
+        }
+      });
+  }
+
+  private drawNewConfirmedChart() {
+    this.activeAndConfirmedChart = new Chart(
+      this.activeAndConfirmedChartElement.nativeElement.getContext('2d'),
+      {
+        type: 'bar',
+        data: this.confirmedByDate,
+        options: {
+          responsive: true,
+          legend: {
+            display: false,
+            position: 'right',
+          },
+        }
+      });
   }
 
 }
